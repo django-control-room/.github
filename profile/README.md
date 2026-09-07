@@ -1,4 +1,4 @@
-![DCR banner](../DCR-banner.png)
+![DCR banner](../DCR-banner-1.png)
 
 Django Control Room is an open-source framework for building operational software inside the Django admin. Create observability, debugging, monitoring, and management experiences through a flexible plugin architecture.
 
