@@ -1,0 +1,37 @@
+name: Sync organization issues to project
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "*/15 * * * *"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sync-org-issues-to-project
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    env:
+      GH_TOKEN: ${{ secrets.PROJECTS_TOKEN }}
+      ORG: django-control-room
+      PROJECT_NUMBER: "3"
+
+    steps:
+      - name: Add organization issues to project
+        shell: bash
+        run: |
+          gh search issues \
+            --owner "$ORG" \
+            --limit 1000 \
+            --json url \
+            --jq '.[].url' |
+          while IFS= read -r issue_url; do
+            gh project item-add "$PROJECT_NUMBER" \
+              --owner "$ORG" \
+              --url "$issue_url" >/dev/null 2>&1 || true
+          done
