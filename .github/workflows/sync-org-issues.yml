@@ -35,3 +35,20 @@ jobs:
               --owner "$ORG" \
               --url "$issue_url" >/dev/null 2>&1 || true
           done
+
+      - name: Add open pull requests
+        shell: bash
+        run: |
+          gh search prs \
+            --owner "$ORG" \
+            --state open \
+            --limit 1000 \
+            --json url \
+            --jq '.[].url' |
+          while IFS= read -r pull_request_url; do
+            echo "Adding $pull_request_url" \
+            gh project item-add "$PROJECT_NUMBER" \
+              --owner "$ORG" \
+              --url "$pull_request_url" \
+            >/dev/null 2>&1 || true
+          done
