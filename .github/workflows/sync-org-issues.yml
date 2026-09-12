@@ -31,6 +31,7 @@ jobs:
             --json url \
             --jq '.[].url' |
           while IFS= read -r issue_url; do
+            echo "Adding issue: $issue_url"
             gh project item-add "$PROJECT_NUMBER" \
               --owner "$ORG" \
               --url "$issue_url" >/dev/null 2>&1 || true
@@ -46,7 +47,7 @@ jobs:
             --json url \
             --jq '.[].url' |
           while IFS= read -r pull_request_url; do
-            echo "Adding $pull_request_url" \
+            echo "Adding $pull_request_url"
             gh project item-add "$PROJECT_NUMBER" \
               --owner "$ORG" \
               --url "$pull_request_url" \
